@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#101116">
+  <title>AFTERHOURS — Social AU</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#" aria-label="Afterhours home"><span class="brand-mark">✳</span><span>afterhours</span></a>
+      <nav class="main-nav" aria-label="Main navigation">
+        <button class="nav-link active" data-view="home"><span>⌂</span> Home</button>
+        <button class="nav-link" data-view="explore"><span>⌕</span> Explore</button>
+        <button class="nav-link" data-view="messages"><span>✉</span> Messages <i class="nav-dot"></i></button>
+        <button class="nav-link" data-view="profile"><span>◎</span> Characters</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="mini-author"><div class="avatar avatar-author">A</div><div><b>AU ARCHIVE</b><small>fictional universe</small></div></div>
+        <small class="muted">A story told through screens.</small>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div><span class="eyebrow">A SOCIAL MEDIA AU</span><h1 id="page-title">Your timeline</h1></div>
+        <button class="icon-button" id="about-button" title="About this AU">ⓘ</button>
+      </header>
+
+      <section class="view active" id="view-home">
+        <div class="story-banner">
+          <div class="banner-copy"><span class="pill">SEASON 01 · EPISODE 01</span><h2>Somewhere<br>between hello<br>and goodbye.</h2><p>A fictional story told through posts, messages, and little moments.</p></div>
+          <div class="banner-art"><span>✳</span><span>✦</span><span>☾</span></div>
+        </div>
+        <div class="section-heading"><div><span class="eyebrow">LATEST UPDATES</span><h2>For you</h2></div><span class="muted small">All caught up</span></div>
+        <div id="timeline" class="timeline"></div>
+      </section>
+
+      <section class="view" id="view-explore">
+        <div class="section-heading"><div><span class="eyebrow">DISCOVER THE UNIVERSE</span><h2>Explore</h2></div></div>
+        <div class="explore-card"><span class="eyebrow">STORY GUIDE</span><h2>Everything is connected.</h2><p>Follow the timeline, peek into private conversations, and get to know the people behind every post.</p><button class="primary-button" data-go="messages">Open messages <span>↗</span></button></div>
+        <div class="section-heading"><div><span class="eyebrow">THE CAST</span><h2>People you may know</h2></div></div>
+        <div class="character-grid" id="character-grid"></div>
+      </section>
+
+      <section class="view" id="view-messages">
+        <div class="section-heading"><div><span class="eyebrow">PRIVATE CORNER</span><h2>Messages</h2></div></div>
+        <div class="chat-layout"><div class="chat-list" id="chat-list"></div><div class="chat-panel" id="chat-panel"><div class="empty-chat"><span>✉</span><h3>Your inbox, their secrets.</h3><p>Select a conversation to read it.</p></div></div></div>
+      </section>
+
+      <section class="view" id="view-profile">
+        <div class="section-heading"><div><span class="eyebrow">THE PEOPLE IN THIS STORY</span><h2>Characters</h2></div></div>
+        <div class="character-grid character-grid-large" id="all-characters"></div>
+      </section>
+
+      <footer class="footer-note">AFTERHOURS <span>·</span> A FICTIONAL SOCIAL AU TEMPLATE</footer>
+    </main>
+
+    <aside class="right-rail">
+      <div class="rail-card now-card"><span class="eyebrow">NOW PLAYING</span><div class="now-icon">♫</div><b>late night thoughts</b><small>your imaginary soundtrack</small><div class="sound-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+      <div class="rail-card"><span class="eyebrow">TRENDING IN THIS AU</span><div class="trend"><small>01 · SCHOOL</small><b>#newsemester</b><span>128 posts</span></div><div class="trend"><small>02 · PEOPLE</small><b>#whoisthat</b><span>86 posts</span></div><div class="trend"><small>03 · RANDOM</small><b>#midnighttalks</b><span>42 posts</span></div></div>
+      <div class="rail-quote">“Some stories happen in real life. Others happen in the notifications.”</div>
+    </aside>
+  </div>
+
+  <div class="modal-backdrop" id="modal" hidden><div class="modal"><button class="modal-close" id="modal-close">×</button><span class="eyebrow">ABOUT THIS PROJECT</span><h2>A little world<br>inside a screen.</h2><p>This is a starter template for your Social Media Interactive AU. All characters, posts, and conversations are fictional sample content. Edit <code>data.js</code> to make it yours.</p><button class="primary-button" id="modal-ok">Got it</button></div></div>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
