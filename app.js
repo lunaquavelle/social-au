@@ -223,7 +223,8 @@ const appNames = {
   camera: "Camera",
   notes: "Notes",
   contacts: "Contacts",
-  settings: "Settings"
+  settings: "Settings",
+  phone: "Phone"
 };
 
 function openApp(appName) {
@@ -254,6 +255,10 @@ function renderApp(appName) {
     case "x":
       renderX(content);
       break;
+   
+    case "phone":
+      renderPhone();
+      break;
 
     case "gallery":
     case "photos":
@@ -278,6 +283,26 @@ function renderApp(appName) {
   }
 }
 
+function renderPhone() {
+  $("#app-content").innerHTML = `
+    <div class="phone-app">
+      <div class="phone-app-title">Phone</div>
+
+      <div class="phone-tabs">
+        <button class="phone-tab active">Favorites</button>
+        <button class="phone-tab">Recents</button>
+        <button class="phone-tab">Contacts</button>
+        <button class="phone-tab">Keypad</button>
+      </div>
+
+      <div class="phone-empty">
+        <div class="phone-empty-icon">☎</div>
+        <h3>Your Phone</h3>
+        <p>Your story calls will appear here.</p>
+      </div>
+    </div>
+  `;
+}
 
 /* =========================
    WHATSAPP CHAT LIST
@@ -686,12 +711,11 @@ $("#app-back").addEventListener("click", goHome);
 
 $("#exit-au-button").addEventListener("click", exitAU);
 
-document.querySelectorAll(".app-icon").forEach((button) => {
-  button.addEventListener("click", () => {
-    openApp(button.dataset.app);
+document.querySelectorAll(".app-icon, .dock-icon").forEach((icon) => {
+  icon.addEventListener("click", () => {
+    openApp(icon.dataset.app);
   });
 });
-
 
 /* =========================
    INITIALIZE
