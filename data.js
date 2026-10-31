@@ -211,56 +211,97 @@ const AU_DATA = {
       initial: "R",
       avatar: "blue",
       preview: "You left your notebook.",
-      messages: [
-        {
-          from: "them",
-          text: "You left your notebook.",
-          time: "16:48"
-        },
-        {
-          from: "me",
-          text: "oh— where?",
-          time: "16:51"
-        },
-        {
-          from: "them",
-          text: "Library. I'll leave it with the front desk.",
-          time: "16:52"
-        },
-        {
-          from: "me",
-          text: "oh my god, thank you 😭",
-          time: "16:53"
-        },
-        {
-          from: "them",
-          text: "No problem.",
-          time: "16:54"
-        },
-        {
-          from: "me",
-          text: "btw, you're Raka, right?",
-          time: "16:56"
-        },
-        {
-          from: "them",
-          text: "Yeah. And you're Alya.",
-          time: "16:57"
-        },
-        {
-          from: "me",
-          text: "you remember my name?",
-          time: "16:58"
-        },
-        {
-          from: "them",
-          text: "It was written on your notebook.",
-          time: "16:59"
-        }
-      ]
-    }
-  ]
-};
+      
+      story: {
+        opening: "Hey. You're home?",
 
+        choices: [
+          {
+            reply: "Not yet. Why?",
+            response: "Just making sure you got home safely.",
+            choices: [
+              {
+                reply: "That's unusual of you.",
+                response: "Is it?",
+                choices: [
+                  {
+                    reply: "A little.",
+                    response: "I'll take that as a compliment."
+                  },
+                  {
+                    reply: "No, it's nice.",
+                    response: "Good. I was hoping you'd say that."
+                  }
+                ]
+              },
+              {
+                reply: "You always check on people?",
+                response: "Not everyone.",
+                choices: [
+                  {
+                    reply: "Oh?",
+                    response: "Don't make me explain over text."
+                  },
+                  {
+                    reply: "I see...",
+                    response: "You don't sound convinced."
+                  }
+                ]
+              }
+            ]
+          },
+
+          {
+            reply: "I'm on my way home.",
+            response: "Alright. Let me know when you get there.",
+            choices: [
+              {
+                reply: "Why? Worried?",
+                response: "Would that be a problem?",
+                choices: [
+                  {
+                    reply: "Maybe not.",
+                    response: "Then get home safely, Alya."
+                  },
+                  {
+                    reply: "A little bit.",
+                    response: "I'll try not to make it obvious."
+                  }
+                ]
+              },
+              {
+                reply: "Okay, I will.",
+                response: "Good. Watch the road."
+              }
+            ]
+          },
+
+          {
+            reply: "Already home. Thanks for asking.",
+            response: "Good. I wasn't sure if you got back safely.",
+            choices: [
+              {
+                reply: "You noticed I left?",
+                response: "I notice things.",
+                choices: [
+                  {
+                    reply: "Apparently.",
+                    response: "Apparently."
+                  },
+                  {
+                    reply: "That's interesting.",
+                    response: "Is that so?"
+                  }
+                ]
+              },
+              {
+                reply: "That's sweet of you.",
+                response: "Don't tell anyone. I have a reputation."
+              }
+            ]
+          }
+        ]
+      },
+      
 // Make AU_DATA accessible to app.js
 window.AU_DATA = AU_DATA;
