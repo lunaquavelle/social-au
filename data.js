@@ -301,7 +301,10 @@ const AU_DATA = {
             ]
           }
         ]
-      },
-      
+            }
+    }
+  ]
+};
+
 // Make AU_DATA accessible to app.js
 window.AU_DATA = AU_DATA;
