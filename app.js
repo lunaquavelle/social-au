@@ -1,11 +1,16 @@
+
 /* =========================
    AFTERHOURS APP ENGINE
+   Interactive WhatsApp Edition
 ========================= */
 
 const $ = (selector) => document.querySelector(selector);
 
 let currentAU = null;
 let currentApp = null;
+let activeChatId = null;
+let chatRuntime = {};
+let chatTimer = null;
 
 
 /* =========================
@@ -20,7 +25,7 @@ function getAUList() {
       id: "au-001",
       title: data.title || "AFTERHOURS",
       genre: "Romance · Drama",
-      description: "A story waiting to be discovered.",
+      description: data.description || "A story waiting to be discovered.",
       status: "Ongoing",
       cover: "",
       characters: data.characters || [],
@@ -82,6 +87,8 @@ function renderLibrary() {
 
 function enterAU(au) {
   currentAU = au;
+  chatRuntime = {};
+  activeChatId = null;
 
   $("#library-view").classList.add("hidden");
   $("#phone-view").classList.remove("hidden");
@@ -98,8 +105,12 @@ function enterAU(au) {
 }
 
 function exitAU() {
+  if (chatTimer) clearTimeout(chatTimer);
+
   currentAU = null;
   currentApp = null;
+  activeChatId = null;
+  chatRuntime = {};
 
   $("#phone-view").classList.add("hidden");
   $("#library-view").classList.remove("hidden");
@@ -130,32 +141,47 @@ function updateClock() {
   $("#home-date").textContent = date;
 }
 
+function getCurrentTime() {
+  return new Date().toLocaleTimeString("en-GB", {
+    hour: "2-digit",
+    minute: "2-digit"
+  });
+}
+
 
 /* =========================
    NOTIFICATIONS
 ========================= */
 
+function getChatPreview(chat) {
+  if (chat.story?.opening) {
+    return chat.story.opening;
+  }
+
+  return chat.messages?.at(-1)?.text || "New conversation";
+}
+
 function renderNotifications() {
   const container = $("#notification-list");
-
   const conversations = currentAU?.conversations || [];
 
   container.innerHTML = "";
 
   conversations.slice(0, 3).forEach((chat) => {
-    const lastMessage = chat.messages?.at(-1);
+    const notification = document.createElement("button");
 
-    if (!lastMessage) return;
-
-    const notification = document.createElement("div");
-
-    notification.className = "notification";
+    notification.type = "button";
+    notification.className = "notification ah-notification";
 
     notification.innerHTML = `
       <small>WHATSAPP · NOW</small>
       <strong>${escapeHTML(chat.name)}</strong>
-      <p>${escapeHTML(lastMessage.text || "")}</p>
+      <p>${escapeHTML(getChatPreview(chat))}</p>
     `;
+
+    notification.addEventListener("click", () => {
+      openChat(chat.id);
+    });
 
     container.appendChild(notification);
   });
@@ -180,6 +206,7 @@ function unlockPhone() {
 
 function goHome() {
   currentApp = null;
+  activeChatId = null;
   showPhoneScreen("home-screen");
 }
 
@@ -201,11 +228,11 @@ const appNames = {
 
 function openApp(appName) {
   currentApp = appName;
+  activeChatId = null;
 
   $("#app-title").textContent = appNames[appName];
 
   showPhoneScreen("app-screen");
-
   renderApp(appName);
 }
 
@@ -253,7 +280,7 @@ function renderApp(appName) {
 
 
 /* =========================
-   WHATSAPP
+   WHATSAPP CHAT LIST
 ========================= */
 
 function renderWhatsApp(container) {
@@ -264,26 +291,246 @@ function renderWhatsApp(container) {
     return;
   }
 
+  const heading = document.createElement("div");
+  heading.className = "ah-chat-heading";
+  heading.textContent = "MESSAGES";
+
+  container.appendChild(heading);
+
   chats.forEach((chat) => {
-    const lastMessage = chat.messages?.at(-1);
+    const item = document.createElement("button");
 
-    const item = document.createElement("div");
-
-    item.className = "chat-item";
+    item.type = "button";
+    item.className = "chat-item ah-chat-item";
 
     item.innerHTML = `
       <div class="chat-avatar">
-        ${escapeHTML(chat.name.charAt(0))}
+        ${escapeHTML(chat.initial || chat.name.charAt(0))}
       </div>
 
       <div class="chat-details">
         <strong>${escapeHTML(chat.name)}</strong>
-        <p>${escapeHTML(lastMessage?.text || "")}</p>
+        <p>${escapeHTML(getChatPreview(chat))}</p>
       </div>
+
+      <span class="ah-chat-arrow">›</span>
     `;
+
+    item.addEventListener("click", () => {
+      openChat(chat.id);
+    });
 
     container.appendChild(item);
   });
+}
+
+
+/* =========================
+   OPEN INDIVIDUAL CHAT
+========================= */
+
+function openChat(chatId) {
+  const chat = currentAU?.conversations.find(
+    (item) => item.id === chatId
+  );
+
+  if (!chat) return;
+
+  activeChatId = chatId;
+  currentApp = "whatsapp";
+
+  $("#app-title").textContent = "WhatsApp";
+
+  showPhoneScreen("app-screen");
+  renderChat(chat);
+}
+
+
+/* =========================
+   CHAT RUNTIME
+========================= */
+
+function initializeChatRuntime(chat) {
+  if (chatRuntime[chat.id]) return;
+
+  if (chat.story) {
+    chatRuntime[chat.id] = {
+      messages: [
+        {
+          from: "them",
+          text: chat.story.opening,
+          time: getCurrentTime()
+        }
+      ],
+      choices: chat.story.choices || [],
+      typing: false,
+      finished: false
+    };
+
+    return;
+  }
+
+  chatRuntime[chat.id] = {
+    messages: [...(chat.messages || [])],
+    choices: [],
+    typing: false,
+    finished: true
+  };
+}
+
+
+/* =========================
+   RENDER CHAT ROOM
+========================= */
+
+function renderChat(chat) {
+  initializeChatRuntime(chat);
+
+  const runtime = chatRuntime[chat.id];
+  const content = $("#app-content");
+
+  const messagesHTML = runtime.messages.map((message) => `
+    <div class="ah-message-row ${message.from === "me" ? "ah-message-right" : "ah-message-left"}">
+      <div class="ah-bubble ${message.from === "me" ? "ah-bubble-me" : "ah-bubble-them"}">
+        <p>${escapeHTML(message.text)}</p>
+        <small>${escapeHTML(message.time || "")}</small>
+      </div>
+    </div>
+  `).join("");
+
+  const typingHTML = runtime.typing ? `
+    <div class="ah-message-row ah-message-left">
+      <div class="ah-typing">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  ` : "";
+
+  let choicesHTML = "";
+
+  if (runtime.choices.length && !runtime.typing) {
+    choicesHTML = `
+      <div class="ah-choice-area">
+        <p>CHOOSE YOUR REPLY</p>
+
+        <div class="ah-choice-list">
+          ${runtime.choices.map((choice, index) => `
+            <button
+              type="button"
+              class="ah-choice-button"
+              data-choice-index="${index}">
+              ${escapeHTML(choice.reply)}
+            </button>
+          `).join("")}
+        </div>
+      </div>
+    `;
+  }
+
+  if (runtime.finished && !runtime.typing && chat.story) {
+    choicesHTML = `
+      <div class="ah-scene-end">
+        <p>END OF THIS SCENE</p>
+        <span>More conversations coming soon.</span>
+      </div>
+    `;
+  }
+
+  content.innerHTML = `
+    <div class="ah-chat-view">
+
+      <div class="ah-chat-subheader">
+        <button type="button" class="ah-chat-back">
+          ‹ Chats
+        </button>
+
+        <div class="ah-chat-person">
+          <strong>${escapeHTML(chat.name)}</strong>
+          <small>${chat.story ? "tap a reply to continue" : "conversation history"}</small>
+        </div>
+      </div>
+
+      <div class="ah-message-list" id="ah-message-list">
+        ${messagesHTML}
+        ${typingHTML}
+      </div>
+
+      ${choicesHTML}
+
+    </div>
+  `;
+
+  content.querySelector(".ah-chat-back").addEventListener("click", () => {
+    activeChatId = null;
+    renderWhatsApp(content);
+  });
+
+  content.querySelectorAll(".ah-choice-button").forEach((button) => {
+    button.addEventListener("click", () => {
+      const index = Number(button.dataset.choiceIndex);
+      selectChatChoice(chat, index);
+    });
+  });
+
+  scrollChatToBottom();
+}
+
+
+/* =========================
+   SELECT REPLY
+========================= */
+
+function selectChatChoice(chat, index) {
+  const runtime = chatRuntime[chat.id];
+
+  if (!runtime || runtime.typing) return;
+
+  const choice = runtime.choices[index];
+
+  if (!choice) return;
+
+  runtime.messages.push({
+    from: "me",
+    text: choice.reply,
+    time: getCurrentTime()
+  });
+
+  runtime.choices = [];
+  runtime.typing = true;
+
+  renderChat(chat);
+
+  if (chatTimer) clearTimeout(chatTimer);
+
+  chatTimer = setTimeout(() => {
+    runtime.typing = false;
+
+    runtime.messages.push({
+      from: "them",
+      text: choice.response,
+      time: getCurrentTime()
+    });
+
+    runtime.choices = choice.choices || [];
+    runtime.finished = runtime.choices.length === 0;
+
+    renderChat(chat);
+
+    chatTimer = null;
+  }, 1200);
+}
+
+
+/* =========================
+   CHAT SCROLL
+========================= */
+
+function scrollChatToBottom() {
+  const messageList = $("#ah-message-list");
+
+  if (messageList) {
+    messageList.scrollTop = messageList.scrollHeight;
+  }
 }
 
 
