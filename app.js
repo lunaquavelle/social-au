@@ -283,6 +283,10 @@ function renderApp(appName) {
   }
 }
 
+/* =========================
+   WHATSAPP CHAT LIST
+========================= */
+
 function renderPhone() {
   $("#app-content").innerHTML = `
     <div class="phone-app">
@@ -303,10 +307,6 @@ function renderPhone() {
     </div>
   `;
 }
-
-/* =========================
-   WHATSAPP CHAT LIST
-========================= */
 
 function renderWhatsApp(container) {
   const chats = currentAU?.conversations || [];
