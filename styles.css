@@ -611,3 +611,238 @@ button {
     font-size: 68px;
   }
 }
+
+/* =========================
+   AFTERHOURS WHATSAPP CHAT
+========================= */
+
+.ah-notification {
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+}
+
+.ah-notification:active {
+  transform: scale(0.98);
+}
+
+.ah-chat-heading {
+  padding: 12px 14px;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: #888;
+  font-weight: 700;
+}
+
+.ah-chat-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  border: 0;
+  border-bottom: 1px solid rgba(120,120,120,0.15);
+}
+
+.ah-chat-item:active {
+  opacity: 0.7;
+}
+
+.ah-chat-arrow {
+  margin-left: auto;
+  font-size: 24px;
+  color: #999;
+}
+
+.ah-chat-view {
+  display: flex;
+  flex-direction: column;
+  min-height: 420px;
+  height: 100%;
+  background: #e9e5df;
+  color: #202522;
+}
+
+.ah-chat-subheader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: #f8f8f8;
+  border-bottom: 1px solid #ddd;
+}
+
+.ah-chat-back {
+  border: 0;
+  background: transparent;
+  color: #176b53;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 6px;
+}
+
+.ah-chat-person {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.ah-chat-person strong {
+  font-size: 13px;
+}
+
+.ah-chat-person small {
+  color: #777;
+  font-size: 10px;
+}
+
+.ah-message-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 10px;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 180px;
+}
+
+.ah-message-row {
+  display: flex;
+  width: 100%;
+}
+
+.ah-message-left {
+  justify-content: flex-start;
+}
+
+.ah-message-right {
+  justify-content: flex-end;
+}
+
+.ah-bubble {
+  max-width: 82%;
+  padding: 9px 11px 6px;
+  border-radius: 12px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+  overflow-wrap: anywhere;
+}
+
+.ah-bubble p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.ah-bubble small {
+  display: block;
+  text-align: right;
+  margin-top: 4px;
+  font-size: 9px;
+  opacity: 0.65;
+}
+
+.ah-bubble-them {
+  background: #fff;
+  border-top-left-radius: 3px;
+}
+
+.ah-bubble-me {
+  background: #d5f5d8;
+  border-top-right-radius: 3px;
+}
+
+.ah-typing {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 14px;
+  background: #fff;
+  border-radius: 12px;
+}
+
+.ah-typing span {
+  width: 5px;
+  height: 5px;
+  background: #888;
+  border-radius: 50%;
+  animation: ahTyping 0.8s infinite alternate;
+}
+
+.ah-typing span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.ah-typing span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes ahTyping {
+  from {
+    opacity: 0.35;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-3px);
+  }
+}
+
+.ah-choice-area {
+  padding: 12px;
+  background: #f8f8f8;
+  border-top: 1px solid #ddd;
+}
+
+.ah-choice-area > p {
+  margin: 0 0 9px;
+  color: #777;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  font-weight: 700;
+}
+
+.ah-choice-list {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.ah-choice-button {
+  width: 100%;
+  padding: 11px;
+  border: 1px solid #c9d9d0;
+  border-radius: 10px;
+  background: #fff;
+  color: #245b47;
+  text-align: left;
+  font-size: 11px;
+  line-height: 1.4;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.ah-choice-button:active {
+  background: #dcefe3;
+}
+
+.ah-scene-end {
+  padding: 16px 12px;
+  text-align: center;
+  background: #f8f8f8;
+  border-top: 1px solid #ddd;
+}
+
+.ah-scene-end p {
+  margin: 0 0 5px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: #176b53;
+}
+
+.ah-scene-end span {
+  font-size: 10px;
+  color: #888;
+}
